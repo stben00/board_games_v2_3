@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Board Games v2.2 — Chess & Checkers</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">♟</div>
+      <div>
+        <div class="title">Board Games v2.2</div>
+        <div class="subtitle">PvP • vs Bot • vs AI (Stockfish) + Checkers with max-capture & flying kings</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="segmented" role="tablist">
+        <button id="tabChess" class="seg active" role="tab">Chess</button>
+        <button id="tabCheckers" class="seg" role="tab">Checkers</button>
+      </div>
+      <button id="btnUndo" class="btn ghost">Undo</button>
+      <button id="btnNew" class="btn">New Game</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="boardCard">
+      <div class="boardHeader">
+        <div class="status">
+          <span class="dot" id="turnDot"></span>
+          <span id="turnText">Turn: —</span>
+          <span class="pill" id="statusPill">playing</span>
+        </div>
+        <div class="hint" id="hintText">Выбери фигуру, чтобы увидеть легальные ходы.</div>
+      </div>
+
+      <div class="boardWrap">
+        <div class="files" id="filesTop"></div>
+        <div class="rankRow">
+          <div class="ranks" id="ranksLeft"></div>
+          <div id="board" class="board"></div>
+          <div class="ranks" id="ranksRight"></div>
+        </div>
+        <div class="files" id="filesBottom"></div>
+      </div>
+
+      <div class="boardFooter">
+        <div id="msg" class="msg"></div>
+      </div>
+    </section>
+
+    <aside class="sideCard">
+      <h3>Opponent</h3>
+      <div class="modePanel">
+        <div class="row">
+          <span class="lbl">Mode:</span>
+          <select id="opponentMode" class="select">
+            <option value="pvp">Human vs Human</option>
+            <option value="bot">Human vs Bot</option>
+            <option value="ai">Human vs AI</option>
+          </select>
+        </div>
+        <div class="row">
+          <span class="lbl">You play:</span>
+          <select id="userSide" class="select">
+            <option value="w">White</option>
+            <option value="b">Black</option>
+          </select>
+        </div>
+        <div class="row">
+          <span class="lbl">Level:</span>
+          <select id="aiLevel" class="select">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+        <div class="small muted">
+          <div><b>Chess:</b> Bot = random legal moves, AI = Stockfish.</div>
+          <div><b>Checkers:</b> Bot = random, AI = heuristic (respects max-capture).</div>
+        </div>
+      </div>
+
+      <h3>Move List</h3>
+      <div id="history" class="history"></div>
+
+      <div class="divider"></div>
+      <h3>Rules Notes</h3>
+      <ul class="notes">
+        <li><b>Chess:</b> all rules handled by python-chess (castling, en-passant, promotion, check/mate/stalemate, draw claims).</li>
+        <li><b>Checkers:</b> mandatory capture, <b>max-capture</b>, multi-jump, men capture backward, <b>flying kings</b>.</li>
+      </ul>
+    </aside>
+  </main>
+
+  <div id="promoModal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modalCard">
+    <div class="modalTitle">Choose promotion</div>
+    <div class="modalSub">Select the piece for pawn promotion:</div>
+    <div class="promoGrid">
+      <button class="promoBtn" data-piece="q">♕ Queen</button>
+      <button class="promoBtn" data-piece="r">♖ Rook</button>
+      <button class="promoBtn" data-piece="b">♗ Bishop</button>
+      <button class="promoBtn" data-piece="n">♘ Knight</button>
+    </div>
+    <div class="modalActions">
+      <button id="promoCancel" class="btn ghost">Cancel</button>
+    </div>
+  </div>
+</div>
+
+  <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>
