@@ -43,6 +43,7 @@ function isVsComputer(){ return opponentMode() !== "pvp"; }
 function computerKind(){ return opponentMode(); } // "bot" or "ai"
 
 function setMessage(text, type="info"){
+  if(!msgEl) return;
   msgEl.textContent = text || "";
   msgEl.style.color =
     type==="bad" ? "rgba(255,77,109,.95)" :
@@ -121,6 +122,7 @@ function render(){
       cell.dataset.r = r;
       cell.dataset.c = c;
 
+      // checkers: disable light squares
       if(mode === "checkers" && (r+c)%2===0) cell.classList.add("disabled");
 
       const lmTag = lastMoveTag(r,c);
@@ -139,8 +141,9 @@ function render(){
       if(p){
         if(mode === "chess"){
           const el = document.createElement("div");
-          el.className = "piece";
-          el.textContent = chessPiece(p);
+          const isW = (p === p.toUpperCase());
+          el.className = "piece " + (isW ? "w" : "b");
+          el.textContent = chessPiece(p); // Unicode from backend legend
           cell.appendChild(el);
         } else {
           const el = document.createElement("div");
@@ -283,7 +286,12 @@ async function onCellClick(e){
 
   if(!selected){
     if(!canSelectPiece(r,c)){
-      setMessage(isVsComputer() && !isUsersTurn() ? "Wait: computer turn." : (state.forced ? "Continue with forced piece." : "Select your piece."), "info");
+      setMessage(
+        isVsComputer() && !isUsersTurn()
+          ? "Wait: computer turn."
+          : (state.forced ? "Continue with forced piece." : "Select your piece."),
+        "info"
+      );
       return;
     }
     selected = [r,c];
